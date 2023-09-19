@@ -28,7 +28,7 @@ int _printf(const char *format, ...)
 		{
 			str_count = putss(va_arg(args, char*));
 			i++;
-			count += (str_count - 1);
+			count += str_count;
 		}
 		else if (format[i + 1] == '%')
 		{
