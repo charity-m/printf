@@ -1,69 +1,42 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdarg.h>
 /**
- * _printf - custom like  printf function
- *@format - a string containing format specifiers.
- *main - main entry point of the program's control flow
+ * _printf - custom like printf function
+ * @format: a string containing format specifiers
+ * Return: number of bytes
  */
-
 int _printf(const char *format, ...);
 {
+	unsigned int i, str_count, count = 0;
 	va_list args;
 
-	va_start(args, format)
+	if (!format || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
+	va _start(args, format);
 
-	int count = 0;
+	for (i = 0; format[i] != '\0'; i++)
+	{
+		if (format[i] != '%')
+		{
+			ptcha(format[i]);
+		}
+		else if (format[i + 1] == 'c')
+		{
+			ptcha(va_arg(args, int));
+			i++;
+		}
+		else if (format[i + 1] == 's')
+		{
 
-	while (*format)
-		if (*format == '%')
+			str_count = putss(va_arg(args, char*));
+			i++;
+			count += (str_count - 1);
+		}
+		else if (format[i + 1] == '%')
 		{
-			format++;
-		if (*format == 'd')
-		{
-			int num = va_arg(args, int);
+			ptcha('%');
+		}
+		count += 1;
 
-			printf("%d", num);
-			count++;
-		}
-		else if (*format == 's')
-		{
-			char *str = va_arg(args, char*);
-
-			printf("%s", str);
-			count += strlen(str);
-		}
-		else if (*format == 'c')
-		{
-			char c = va_arg(args, int);
-
-			putchar(c);
-			count++;
-		}
-		else if (*format == '%')
-		{
-			putchar('%');
-			count++;
-		}
-		else
-		{
-			putchar(*format);
-			count++;
-		}
-		format++;
 		va_end(args);
 		return (count);
-		}
-int main(void)
-{
-	int num = 42;
-	char str[] = "Hello, World!";
-	char c = 'A';
-
-int char_count = _printf("This is a number: %d\n", num);
-char_count += _printf("This is a string:%s\n", str);
-char_count += _printf("This is a character:%c\n", c);
-char_count += _printf("This is a percent sign:%%\n");
-printf("Total characters printed:%d\n", char_count);
-return (0);
-}
+	}
