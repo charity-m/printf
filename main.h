@@ -4,4 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 int _printf(const char *format, ...);
-#endif /* MAIN_H */
+/**
+ * @format - string containing format specifiers
+ * _printf - custom printf function
+ * main - main entry point of the program flow
+ */
+#endif
