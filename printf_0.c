@@ -26,7 +26,6 @@ int _printf(const char *format, ...)
 		}
 		else if (format[i + 1] == 's')
 		{
-
 			str_count = putss(va_arg(args, char*));
 			i++;
 			count += (str_count - 1);
