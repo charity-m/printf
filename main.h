@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+int _printf(const char *format, ...);
+int ptcha(char c);
+int putss(char *c);
 #define UNUSED(x) (void)(x)
 #define BUFF_SIZE 1024
 
