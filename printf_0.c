@@ -1,77 +1,41 @@
-#include <stdarg.h>
-#include <stdio.h>
-#define BUFFER_SIZE 1024
-
-int _printf(const char *format, ...);
+#include "main.h"
+/**
+ * _printf - custom like printf function
+ * @format: a string containing format specifiers
+ * Return: number of bytes
+ */
+int _printf(const char *format, ...)
 {
-	int print_buff(char buff[], int *buffer_index);
-	int print_int(int value);
+	unsigned int i, str_count, count = 0;
 	va_list args;
-	int count = 0;
-	int print = 0;
-	int buffer_index = 0;
-	char buff[BUFFER_SIZE];
 
+	if (!format || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
 	va_start(args, format);
 
-	while (*format)
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (*format == '%')
+		if (format[i] != '%')
 		{
-			buff[buffer_index] = '%';
-			if (buffer_index == BUFFER_SIZE)
-			{
-				print_buff(buff, &buffer_index);
-				count += buffer_index;
-			}
+			ptcha(format[i]);
 		}
-		else if (*format == 'c')
+		else if (format[i + 1] == 'c')
 		{
-			int ch = va_arg(args, int);
-
-			buff[buffer_index++] = ch;
-			if (buffer_index == BUFFER_SIZE)
-			{
-				print_buff(buff, &buffer_index);
-				count += buffer_index;
-			}
+			ptcha(va_arg(args, int));
+			i++;
 		}
-		else if (*format == 's')
+		else if (format[i + 1] == 's')
 		{
-			char *str = va_arg(args, char*);
-
-			while (*str)
-			{
-				buff[buffer_index++] = *str;
-				str++;
-				if (buffer_index == BUFFER_SIZE)
-				{
-					print_buff(buff, &buffer_index);
-					count += buffer_index;
-				}
-			}
+			str_count = putss(va_arg(args, char*));
+			i++;
+			count += (str_count - 1);
 		}
-		else if (*format == 'd' || *format == 'i')
+		else if (format[i + 1] == '%')
 		{
-			int value = va_args(args, int);
-
-			print = print_int(value);
-			count += print;
+			ptcha('%');
 		}
-		else
-		{
-			buff[buffer_index++] = *format;
-			if (buffer_index == BUFFER_SIZE)
-			{
-				print_buff(buff, &buffer_index);
-				count += buffer_index;
-				format++;
-			}
+		count += 1;
 		}
-		print_buff(buff, &buffer_index);
-		count += buffer_index;
-
 		va_end(args);
 		return (count);
-	}
-
+}
