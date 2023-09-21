@@ -1,41 +1,77 @@
-#include "main.h"
-/**
- * _printf - custom like printf function
- * @format: a string containing format specifiers
- * Return: number of bytes
- */
-int _printf(const char *format, ...)
-{
-	unsigned int i, str_count, count = 0;
-	va_list args;
+#include <stdarg.h>
+#include <stdio.h>
+#define BUFFER_SIZE 1024
 
-	if (!format || (format[0] == '%' && format[1] == '\0'))
-		return (-1);
+int _printf(const char *format, ...);
+{
+	int print_buff(char buff[], int *buffer_index);
+	int print_int(int value);
+	va_list args;
+	int count = 0;
+	int print = 0;
+	int buffer_index = 0;
+	char buff[BUFFER_SIZE];
+
 	va_start(args, format);
 
-	for (i = 0; format[i] != '\0'; i++)
+	while (*format)
 	{
-		if (format[i] != '%')
+		if (*format == '%')
 		{
-			ptcha(format[i]);
+			buff[buffer_index] = '%';
+			if (buffer_index == BUFFER_SIZE)
+			{
+				print_buff(buff, &buffer_index);
+				count += buffer_index;
+			}
 		}
-		else if (format[i + 1] == 'c')
+		else if (*format == 'c')
 		{
-			ptcha(va_arg(args, int));
-			i++;
+			int ch = va_arg(args, int);
+
+			buff[buffer_index++] = ch;
+			if (buffer_index == BUFFER_SIZE)
+			{
+				print_buff(buff, &buffer_index);
+				count += buffer_index;
+			}
 		}
-		else if (format[i + 1] == 's')
+		else if (*format == 's')
 		{
-			str_count = putss(va_arg(args, char*));
-			i++;
-			count += (str_count - 1);
+			char *str = va_arg(args, char*);
+
+			while (*str)
+			{
+				buff[buffer_index++] = *str;
+				str++;
+				if (buffer_index == BUFFER_SIZE)
+				{
+					print_buff(buff, &buffer_index);
+					count += buffer_index;
+				}
+			}
 		}
-		else if (format[i + 1] == '%')
+		else if (*format == 'd' || *format == 'i')
 		{
-			ptcha('%');
+			int value = va_args(args, int);
+
+			print = print_int(value);
+			count += print;
 		}
-		count += 1;
+		else
+		{
+			buff[buffer_index++] = *format;
+			if (buffer_index == BUFFER_SIZE)
+			{
+				print_buff(buff, &buffer_index);
+				count += buffer_index;
+				format++;
+			}
 		}
+		print_buff(buff, &buffer_index);
+		count += buffer_index;
+
 		va_end(args);
 		return (count);
-}
+	}
+
