@@ -17,25 +17,31 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] != '%')
 		{
-			ptcha(format[i]);
+			_putchar(format[i]);
 		}
 		else if (format[i + 1] == 'c')
 		{
-			ptcha(va_arg(args, int));
+			_putchar(va_arg(args, int));
 			i++;
 		}
 		else if (format[i + 1] == 's')
 		{
-			str_count = putss(va_arg(args, char*));
+			str_count = _puts(va_arg(args, char*));
 			i++;
 			count += (str_count - 1);
 		}
 		else if (format[i + 1] == '%')
 		{
-			ptcha('%');
+			_putchar('%');
+		}
+		else
+		{
+			_putchar('%');
+			i++;
 		}
 		count += 1;
-		}
-		va_end(args);
-		return (count);
+	}
+
+	va_end(args);
+	return (count);
 }
